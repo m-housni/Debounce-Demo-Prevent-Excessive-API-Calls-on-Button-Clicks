@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Debouncing Example</title>
+  </head>
+  <body>
+    <h1>Debounce Button Clicks</h1>
+    <button id="debounce-btn">Call API</button>
+    <div id="response"></div>
+
+    <script>
+      // 1. Create a debounce function
+      function debounce(callback, delay) {
+        let timeoutId;
+        return function (...args) {
+          // Clear the previous timer if this function is called again before 'delay' ms
+          clearTimeout(timeoutId);
+          // Set a new timer to invoke the callback
+          timeoutId = setTimeout(() => {
+            callback.apply(this, args);
+          }, delay);
+        };
+      }
+
+      // 2. Simulate an API call
+      function fakeApiCall() {
+        const responseElement = document.getElementById('response');
+        responseElement.textContent = `API called at ${new Date().toLocaleTimeString()}`;
+        console.log('API called');
+      }
+
+      // 3. Wrap our API call inside a debounced function
+      const debouncedApiCall = debounce(fakeApiCall, 1000);
+
+      // 4. Attach event listener to the button
+      const button = document.getElementById('debounce-btn');
+      button.addEventListener('click', debouncedApiCall);
+    </script>
+  </body>
+</html>
